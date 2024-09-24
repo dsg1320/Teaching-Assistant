@@ -40,3 +40,4 @@ export const handleChat = async (req, res) => {
     res.status(500).json({ error: 'Failed to generate response' });
   }
 };
+
