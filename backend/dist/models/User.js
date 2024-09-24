@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     sessions: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Session', // Reference the Session model
+            ref: 'Session'
         }
     ]
 });
