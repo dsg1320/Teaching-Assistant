@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-//import { randomUUID } from "crypto";
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -22,6 +21,5 @@ const userSchema = new mongoose.Schema({
     ]
 });
 const User = mongoose.model("User", userSchema);
-//export {User};
 export default User;
 //# sourceMappingURL=User.js.map
