@@ -12,5 +12,6 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 //remove it in production
 app.use(morgan("dev"));
 app.use("/api/v1", appRouter);
+//Register chat routes
 export default app;
 //# sourceMappingURL=app.js.map

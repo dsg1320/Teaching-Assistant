@@ -1,3 +1,4 @@
+
 import { GoogleGenerativeAI } from "@google/generative-ai"; // ES module import
 const apiKey = process.env.GEMINI_API_KEY; // Store API key in .env file
 const genAI = new GoogleGenerativeAI(apiKey);

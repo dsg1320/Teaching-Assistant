@@ -1,5 +1,4 @@
 import mongoose, { isValidObjectId } from "mongoose";
-
 const userSchema = new mongoose.Schema({
     username:{
         type: String,
@@ -14,7 +13,7 @@ const userSchema = new mongoose.Schema({
         type:String,
         required: true,
     },
-    sessions:[
+    sessions: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Session'
