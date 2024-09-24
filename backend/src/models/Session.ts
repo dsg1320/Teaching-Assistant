@@ -1,3 +1,4 @@
+
 import mongoose from 'mongoose';
 import { randomUUID } from 'crypto';
 
@@ -35,3 +36,4 @@ const sessionSchema = new mongoose.Schema({
 
 const Session = mongoose.model('Session', sessionSchema);
 export default Session;
+

@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import cors from "cors";
 
 
+
+
 config();
 const app=express();
 //middlewares
@@ -17,5 +19,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET))
 app.use(morgan("dev"));
 
 app.use("/api/v1", appRouter);
+//Register chat routes
+
 
 export default app;

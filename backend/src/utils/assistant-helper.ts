@@ -1,3 +1,4 @@
+
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai"; // ES module import
 
   
@@ -32,4 +33,5 @@ import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/ge
       console.error('Error generating Socratic response:', error);
       return 'Sorry, I encountered an error. Please try again later.';
     }
+
   };
