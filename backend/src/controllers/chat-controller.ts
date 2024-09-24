@@ -1,3 +1,4 @@
+
 import { generateSocraticResponse } from '../utils/assistant-helper.js';
 //import User from '../models/Users.js';
 import Session from '../models/Session.js';  // Import Session model
@@ -32,7 +33,6 @@ export const handleChat = async (req, res) => {
 
     // Save the updated session
     await session.save();
-
     // Send the assistant's response back to the frontend
     res.json({ message: assistantMessage });
   } catch (error) {
@@ -40,4 +40,4 @@ export const handleChat = async (req, res) => {
     res.status(500).json({ error: 'Failed to generate response' });
   }
 };
-
+//# sourceMappingURL=chat-controller.js.map
