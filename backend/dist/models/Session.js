@@ -1,10 +1,10 @@
-
 import mongoose from 'mongoose';
-import { randomUUID } from 'crypto';
 const sessionSchema = new mongoose.Schema({
     sessionId: {
-        type: String,
-        default: randomUUID(),
+        type: mongoose.Schema.Types.ObjectId,
+        //default: randomUUID(),
+        ref: 'User',
+        required: true
     },
     sessionName: {
         type: String,
