@@ -48,3 +48,4 @@ export const handleChat = async (req, res) => {
     }
 };
 //# sourceMappingURL=chat-controller.js.map
+//# sourceMappingURL=chat-controller.js.map
