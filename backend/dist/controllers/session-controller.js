@@ -27,4 +27,35 @@ export const createSession = async (req, res) => {
         return res.status(500).json({ message: "Failed to create session" });
     }
 };
+export const getSessionsByUser = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const sessions = await Session.find({ userId }).select('sessionName _id');
+        if (!sessions) {
+            return res.status(404).json({ message: 'No sessions found for this user.' });
+        }
+        res.status(200).json(sessions);
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+// Function to get the chat history by session ID
+export const getChatHistoryBySessionId = async (req, res) => {
+    const { sessionId } = req.params; // Extract sessionId from params
+    try {
+        // Find the session by sessionId and return the chatHistory
+        const session = await Session.findById(sessionId).select('chatHistory');
+        // If the session doesn't exist, return a 404 response
+        if (!session) {
+            return res.status(404).json({ message: 'Session not found.' });
+        }
+        // Return the chat history of the found session
+        res.status(200).json(session.chatHistory);
+    }
+    catch (error) {
+        // Handle any errors during the database query
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
 //# sourceMappingURL=session-controller.js.map
