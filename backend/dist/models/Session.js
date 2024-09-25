@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 const sessionSchema = new mongoose.Schema({
-    sessionId: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         //default: randomUUID(),
         ref: 'User',

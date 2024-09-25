@@ -15,8 +15,22 @@ export const handleChat = async (req, res) => {
             content: message,
             timestamp: new Date(),
         });
+        //console.log(session.chatHistory)
+        const formattedChatHistory = session.chatHistory.map((msg) => ({
+            role: msg.role === 'user' ? "user" : "model",
+            parts: [{ data: msg.content }]
+        }));
+        console.log("Chat History Before Sending:", JSON.stringify(formattedChatHistory, null, 2));
+        if (formattedChatHistory.length === 0) {
+            return res.status(400).json({ error: 'Chat history is empty.' });
+        }
+        for (const msg of formattedChatHistory) {
+            if (!msg.role || !msg.parts || !msg.parts[0].data) {
+                return res.status(400).json({ error: 'Chat history is missing required fields.' });
+            }
+        }
         // Generate the response from Gemini AI
-        const assistantMessage = await generateSocraticResponse(session.chatHistory);
+        const assistantMessage = await generateSocraticResponse(formattedChatHistory);
         // Append the assistant's response to the session history
         session.chatHistory.push({
             role: "assistant",
