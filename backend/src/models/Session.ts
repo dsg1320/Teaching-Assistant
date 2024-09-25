@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { randomUUID } from 'crypto';
 
 const sessionSchema = new mongoose.Schema({
-    sessionId: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         //default: randomUUID(),
         ref: 'User',
