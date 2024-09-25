@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import Session from '../models/Session.js'; // If session is separate
+import { Request,Response } from 'express';
 
 export const createSession = async (req, res) => {
   try {
