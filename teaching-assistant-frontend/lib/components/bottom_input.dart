@@ -8,9 +8,7 @@ class BottomInput extends StatefulWidget {
 
 class _BottomInputState extends State<BottomInput> {
   final TextEditingController controller = TextEditingController();
-  List<String> messages = [];
-  int? editingIndex;
-  int? expandedIndex;
+  List<Map<String, String>> messages = []; // List to hold messages
 
   @override
   Widget build(BuildContext context) {
@@ -24,95 +22,47 @@ class _BottomInputState extends State<BottomInput> {
             reverse: true,
             itemCount: messages.length,
             itemBuilder: (context, index) {
-              bool isModelMessage = index == 0;
+              bool isUserMessage = messages[index]['sender'] == 'user';
 
-              return GestureDetector(
-                onLongPress: () {
-                  if (!isModelMessage) {
-                    setState(() {
-                      controller.text = messages[index];
-                      editingIndex = index;
-                      expandedIndex = index;
-                    });
-                  }
-                },
-                child: Align(
-                  alignment: isModelMessage
-                      ? Alignment.centerLeft
-                      : Alignment.centerRight,
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
-                    margin:
-                        EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                    decoration: BoxDecoration(
-                      color: isModelMessage
-                          ? AppColors.primaryColor
-                          : AppColors.secondaryColor,
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment
-                          .center, // Aligns the image and text vertically in the center
-                      children: [
-                        if (isModelMessage) ...[
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Image.asset(
-                              'images/ai_logo.png',
-                              width: 30,
-                              height: 30,
-                            ),
-                          ),
-                        ],
-                        Flexible(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: isModelMessage
-                                ? CrossAxisAlignment.start
-                                : CrossAxisAlignment.end,
-                            children: [
-                              if (expandedIndex != index) ...[
-                                Text(
-                                  messages[index],
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: isModelMessage
-                                        ? Colors.black
-                                        : Colors.black,
-                                  ),
-                                ),
-                              ],
-                              if (expandedIndex == index) ...[
-                                ConstrainedBox(
-                                  constraints: BoxConstraints(maxHeight: 150.0),
-                                  child: SingleChildScrollView(
-                                    child: TextField(
-                                      controller: controller,
-                                      maxLines: null,
-                                      onSubmitted: (text) {
-                                        setState(() {
-                                          messages[index] = text;
-                                          controller.clear();
-                                          expandedIndex =
-                                              null; // Collapse the bubble
-                                        });
-                                      },
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        hintText: 'Edit message...',
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ],
+              return Align(
+                alignment: isUserMessage
+                    ? Alignment.centerRight
+                    : Alignment.centerLeft,
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  decoration: BoxDecoration(
+                    color: isUserMessage
+                        ? AppColors.secondaryColor
+                        : AppColors.primaryColor,
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (!isUserMessage) ...[
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Image.asset(
+                            'images/ai_logo.png',
+                            width: 30,
+                            height: 30,
                           ),
                         ),
                       ],
-                    ),
+                      Flexible(
+                        child: Text(
+                          messages[index]['text']!,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );
@@ -198,13 +148,27 @@ class _BottomInputState extends State<BottomInput> {
                             iconSize: screenHeight * 0.025,
                             icon: const Icon(Icons.send),
                             onPressed: () {
-                              setState(() {
-                                String text = controller.text.trim();
-                                if (text.isNotEmpty) {
-                                  messages.insert(0, text);
+                              String text = controller.text.trim();
+                              if (text.isNotEmpty) {
+                                // Add user message
+                                setState(() {
+                                  messages.insert(
+                                      0, {'sender': 'user', 'text': text});
                                   controller.clear();
-                                }
-                              });
+
+                                  // Simulate model response after user sends a message
+                                  Future.delayed(Duration(milliseconds: 0), () {
+                                    setState(() {
+                                      // Add model response
+                                      messages.insert(0, {
+                                        'sender': 'model',
+                                        'text':
+                                            'This is a simulated response to: "$text"'
+                                      });
+                                    });
+                                  });
+                                });
+                              }
                             },
                           ),
                         ),
