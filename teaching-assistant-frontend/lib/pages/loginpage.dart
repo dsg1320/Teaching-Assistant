@@ -1,136 +1,106 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:teaching_assistant/pages/chat_page.dart';
 import 'package:teaching_assistant/pages/homepage.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  String message = '';
+
+  Future<void> login() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    if (email.isNotEmpty && password.isNotEmpty) {
+      String apiUrl =
+          "http://localhost:5001/api/v1/user/login"; // Your API URL for login
+
+      try {
+        final response = await http.post(
+          Uri.parse(apiUrl),
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({
+            'email': email,
+            'password': password,
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          final responseBody = json.decode(response.body);
+
+          // Set the success message
+          setState(() {
+            message = responseBody['message'] ?? 'Login successful!';
+          });
+
+          // Initialize messages if needed
+          List<Map<String, String>> messages = [];
+
+          // Navigate to the ChatPage without session ID
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
+        } else {
+          setState(() {
+            message = 'Login failed: ${response.body}';
+          });
+        }
+      } catch (error) {
+        setState(() {
+          message = 'Error connecting to the server. Please try again.';
+        });
+        print('Network error: $error');
+      }
+    } else {
+      setState(() {
+        message = 'Please fill in both fields.';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Get the screen width for responsiveness
-    final double screenWidth = MediaQuery.of(context).size.width;
-
-    // Define the border radius to be consistent for input fields and the button
-    const double borderRadius = 10.0;
-
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
+      appBar: AppBar(title: Text('Login')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Center the column content
-          crossAxisAlignment:
-              CrossAxisAlignment.center, // Align children to center
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Image at the top
-            Image.asset(
-              'images/ai_logo.png', // Replace with your image asset
-              height: 70, // Adjust height as needed
-            ),
-
-            const SizedBox(height: 20), // Spacing between elements
-
-            // "Create an account" text
-            const Text(
-              'Create an account',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 20), // Spacing between elements
-
-            // Username input field
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Username',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(borderRadius),
-                  ),
-                ),
+            TextField(
+              controller: emailController,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
               ),
             ),
-
-            const SizedBox(height: 20), // Spacing between elements
-
-            // Password input field
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(borderRadius),
-                  ),
-                ),
-                obscureText: true, // To hide the password input
+            SizedBox(height: 16.0),
+            TextField(
+              controller: passwordController,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(),
               ),
+              obscureText: true,
             ),
-
-            const SizedBox(height: 20), // Spacing between elements
-
-            // Login Button with gradient background
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Container(
-                width: screenWidth *
-                    0.85, // Responsive width (85% of screen width)
-                height: 50, // Fixed height for button
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(borderRadius),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color.fromRGBO(212, 182, 85, 1),
-                      Color.fromRGBO(255, 243, 205, 1),
-                      Color.fromRGBO(212, 182, 85, 1)
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    stops: [0.0, 0.51, 0.84],
-                  ),
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomePage()), // Navigate to HomePage
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor:
-                        Colors.transparent, // To keep the gradient visible
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                    ),
-                  ),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                ),
-              ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: login,
+              child: Text('Login'),
             ),
-
-            const SizedBox(height: 20), // Spacing between elements
-
-            // "Want to create an account?" text
-            const Text('Want to create an account?'),
-
-            // Yellow "Login" text
-            GestureDetector(
-              onTap: () {
-                // Define what happens on tapping this text
-                print('Login tapped');
-              },
-              child: const Text(
-                'Login',
-                style: TextStyle(
-                  color: Color.fromRGBO(212, 182, 85, 1),
-                  fontSize: 22, // Slightly bigger text
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            SizedBox(height: 16.0),
+            Text(message, style: TextStyle(color: Colors.red)),
           ],
         ),
       ),

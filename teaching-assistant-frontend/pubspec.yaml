@@ -37,6 +37,11 @@ dependencies:
   cupertino_icons: ^1.0.6
   flutter_tts: ^4.0.2
   speech_to_text: ^7.0.0
+  http:
+  uuid: ^4.5.1
+  shimmer: ^3.0.0
+  flutter_staggered_animations: ^1.1.1
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_test:

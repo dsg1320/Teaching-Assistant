@@ -2,35 +2,59 @@ import 'package:flutter/material.dart';
 import 'package:teaching_assistant/components/colors.dart';
 
 class Sidebar extends StatelessWidget {
+  final List<String> chatTitles;
+  final Function(String) onChatSelected;
+  final Function(String) onNewChat;
+  final Function(String) onDeleteChat;
+  final Function(String) onEditChat;
+
+  Sidebar({
+    required this.chatTitles,
+    required this.onChatSelected,
+    required this.onNewChat,
+    required this.onDeleteChat,
+    required this.onEditChat,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: AppColors.primaryColor,
       child: ListView(
         padding: EdgeInsets.zero,
-        children: <Widget>[
-          const DrawerHeader(
+        children: [
+          DrawerHeader(
+            child: Text('Chats'),
             decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text(
-              'Drawer Header',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
+              color: AppColors.accentColor,
             ),
           ),
+          ...chatTitles.map((title) => ListTile(
+                title: Text(title),
+                onTap: () {
+                  onChatSelected(title);
+                },
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        onEditChat(title);
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        onDeleteChat(title);
+                      },
+                    ),
+                  ],
+                ),
+              )),
           ListTile(
-            title: const Text('Item 1'),
+            title: Text('New Chat'),
             onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const Text('Item 2'),
-            onTap: () {
-              Navigator.pop(context);
+              onNewChat('');
             },
           ),
         ],

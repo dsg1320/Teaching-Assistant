@@ -5,13 +5,10 @@ import appRouter from './routes/index.js';
 import cookieParser from 'cookie-parser';
 config();
 const app = express();
-//middlewares
-//app.use(cors({origin:"http://localhost:5173", credentials: true}));
+// Middleware
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
-//remove it in production
 app.use(morgan("dev"));
-app.use("/api/v1", appRouter);
-//Register chat routes
+app.use("/api/v1", appRouter); // Mount all routes under /api/v1
 export default app;
 //# sourceMappingURL=app.js.map
