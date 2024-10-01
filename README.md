@@ -19,10 +19,10 @@ This project is an AI-powered teaching assistant built to help students learn So
 
 ### Prerequisites
 
-- [A] Node.js (version 14.x or above)
-- [B] Flutter SDK
-- [C] MongoDB setup (Mongoose)
-- [D] Git
+- Node.js (version 14.x or above)
+- Flutter SDK
+- MongoDB setup (Mongoose)
+-  Git
 
 ### Steps
 
