@@ -55,6 +55,23 @@ This project is an AI-powered teaching assistant built to help students learn So
    ```bash
    flutter run
    ```
+## Results
+**Login**
+![Login page](app images/app images/login.png)
+
+**Session Start**
+![Login page](app images/app images/chat start.png)
+
+**Session responses**
+![Login page](app images/app images/chat responses.png)
+
+**Code generation**
+![Login page](app images/app images/chat code gen.png)
+
+**Session List**
+![Login page](app images/app images/session list.png)
+
+
 ## License
 This project is licensed under the MIT License.
 
