@@ -41,9 +41,11 @@ This project is an AI-powered teaching assistant built to help students learn So
 4. **Set Up Environment Variables**:
    Create a **.env** file in the backend folder with the following details:
    ```bash
-   MONGO_URI=
-   PORT=5001
    GEMINI_API_KEY=
+   MONGODB_URL=
+   JWT_SECRET=
+   COOKIE_SECRET=
+   PORT=5001
 5. **Run the Application**:  
    Run backend:  
    ```bash
