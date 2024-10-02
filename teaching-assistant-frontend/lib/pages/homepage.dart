@@ -124,9 +124,11 @@ class _HomePageState extends State<HomePage>
               ..shader = const LinearGradient(
                 colors: [
                   AppColors.primaryColor,
-                  AppColors.secondaryColor,
+                  AppColors.primaryColor,
                   AppColors.accentColor,
                 ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ).createShader(Rect.fromLTWH(0, 0, 200, 70)),
           ),
         ),

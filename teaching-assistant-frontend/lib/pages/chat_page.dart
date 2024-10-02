@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:teaching_assistant/components/colors.dart';
+import 'package:flutter_highlight/flutter_highlight.dart';
+import 'package:flutter_highlight/themes/github.dart';
 
 class ChatPage extends StatefulWidget {
   final String title;
@@ -96,6 +98,12 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
+  // Improved code block detection
+  bool _isCodeSnippet(String message) {
+    return message
+        .contains("```"); // Check if the message contains code delimiters
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,6 +136,64 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                     ),
                   );
+                }
+
+                // Check if the message contains a code snippet
+                if (widget.messages[index]['sender'] == 'model') {
+                  if (_isCodeSnippet(widget.messages[index]['text']!)) {
+                    final codeText = widget.messages[index]['text']!
+                        .replaceAll("```", ""); // Remove backticks
+
+                    return Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: const Color.fromARGB(119, 0, 0, 0),
+                            width: 0.5,
+                          ),
+                        ),
+                        child: HighlightView(
+                          codeText,
+                          language:
+                              'dart', // Define the language you want highlighted
+                          theme: githubTheme, // Choose the theme
+                          padding: const EdgeInsets.all(8),
+                          textStyle: const TextStyle(
+                            fontFamily: 'Courier',
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: const Color.fromARGB(119, 0, 0, 0),
+                            width: 0.5,
+                          ),
+                        ),
+                        child: Text(
+                          widget.messages[index]['text']!,
+                          style: const TextStyle(
+                            fontFamily: 'Courier',
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
                 }
 
                 return AnimationConfiguration.staggeredList(
@@ -192,10 +258,12 @@ class _ChatPageState extends State<ChatPage> {
                       padding: EdgeInsets.only(
                           right: MediaQuery.of(context).size.width * 0.02),
                       child: TextField(
+                        cursorColor: AppColors.accentColor,
                         controller: _controller,
                         decoration: InputDecoration(
                           hintText: 'Type a message...',
-                          hintStyle: TextStyle(color: Colors.grey[600]),
+                          hintStyle: TextStyle(
+                              color: const Color.fromARGB(104, 67, 67, 67)),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide(
@@ -217,18 +285,27 @@ class _ChatPageState extends State<ChatPage> {
                               width: 1.0,
                             ),
                           ),
-                          filled: true,
-                          fillColor: AppColors.secondaryColor,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 12.0, horizontal: 15.0),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
                         ),
+                        style: TextStyle(
+                            color: const Color.fromARGB(255, 22, 22, 22)),
                       ),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.send),
-                    onPressed: _sendMessage,
-                    padding: EdgeInsets.all(10.0),
+                  GestureDetector(
+                    onTap: _sendMessage,
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.secondaryColor,
+                      ),
+                      child: Icon(
+                        Icons.send,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
                   ),
                 ],
               ),

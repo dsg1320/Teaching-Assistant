@@ -23,7 +23,7 @@ class Sidebar extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            child: Text('Chats'),
+            child: Text('Menu'),
             decoration: BoxDecoration(
               color: AppColors.accentColor,
             ),
