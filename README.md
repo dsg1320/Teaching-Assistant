@@ -57,19 +57,19 @@ This project is an AI-powered teaching assistant built to help students learn So
    ```
 ## Results
 **Login**
-![Login page](app images/app images/login.png)
+![Login page](app%20images/app%20images/login.png)
 
 **Session Start**
-![Login page](app images/app images/chat start.png)
+![Start a new session](app%20images/app%20images/chat%20start.png)
 
 **Session responses**
-![Login page](app images/app images/chat responses.png)
+![Socratic teaching assistant responses](app%20images/app%20images/chat%20responses.png)
 
 **Code generation**
-![Login page](app images/app images/chat code gen.png)
+![Teaching assistant code generation](app%20images/app%20images/chat%20code%20gen.png)
 
 **Session List**
-![Login page](app images/app images/session list.png)
+![The list of sessions created by the user](app%20images/app%20images/session%20list.png)
 
 
 ## License
