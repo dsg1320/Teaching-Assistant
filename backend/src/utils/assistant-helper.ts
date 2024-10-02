@@ -45,7 +45,7 @@ const apiKey = process.env.GEMINI_API_KEY;
         ...chatHistory
       ];
   
-      console.log("Formatted History Being Sent:", JSON.stringify(formattedHistory, null, 2));
+      //console.log("Formatted History Being Sent:", JSON.stringify(formattedHistory, null, 2));
   
 
         /*const formattedHistory = chatHistory.map(message => ({
