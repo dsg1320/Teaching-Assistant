@@ -39,7 +39,7 @@ export const generateSocraticResponse = async (chatHistory) => {
             ...initialContext,
             ...chatHistory
         ];
-        console.log("Formatted History Being Sent:", JSON.stringify(formattedHistory, null, 2));
+        //console.log("Formatted History Being Sent:", JSON.stringify(formattedHistory, null, 2));
         /*const formattedHistory = chatHistory.map(message => ({
             role: message.role === "assistant" ? "model" : message.role, // Map 'assistant' to 'model'
             parts: [{ data: message.content }], // Ensure 'parts' has an array with content
