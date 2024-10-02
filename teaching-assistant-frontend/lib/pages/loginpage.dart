@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:teaching_assistant/components/colors.dart';
 import 'dart:convert';
 
 import 'package:teaching_assistant/pages/chat_page.dart';
@@ -41,10 +42,7 @@ class _LoginPageState extends State<LoginPage> {
             message = responseBody['message'] ?? 'Login successful!';
           });
 
-          // Initialize messages if needed
-          List<Map<String, String>> messages = [];
-
-          // Navigate to the ChatPage without session ID
+          // Navigate to the HomePage
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -72,12 +70,31 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
+      // appBar: AppBar(title: Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Add the image at the top
+            Image.asset(
+              'images/ai_logo.png', // Replace with your image path
+              height: 65,
+              width: 65,
+            ),
+            SizedBox(height: 16.0),
+
+            // Add "Login" text heading
+            Text(
+              'Welcome back!',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 24.0),
+
+            // Email input field
             TextField(
               controller: emailController,
               decoration: InputDecoration(
@@ -86,6 +103,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 16.0),
+
+            // Password input field
             TextField(
               controller: passwordController,
               decoration: InputDecoration(
@@ -95,12 +114,46 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: true,
             ),
             SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: login,
-              child: Text('Login'),
+
+            // Gradient login button
+            Container(
+              width: double.infinity, // Match width of text fields
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.accentColor,
+                    AppColors.secondaryColor,
+                    AppColors.accentColor
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: ElevatedButton(
+                onPressed: login,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Colors.transparent, // Set background to transparent
+                  shadowColor: Colors.transparent, // Remove shadow
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                ),
+                child: Text(
+                  'Login',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: const Color.fromARGB(255, 0, 0, 0),
+                  ),
+                ),
+              ),
             ),
             SizedBox(height: 16.0),
-            Text(message, style: TextStyle(color: Colors.red)),
+
+            // Error message display
+            Text(
+              message,
+              style: TextStyle(color: Colors.red),
+            ),
           ],
         ),
       ),
