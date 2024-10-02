@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:teaching_assistant/pages/homepage.dart';
+import 'package:teaching_assistant/pages/loginpage.dart';
 import 'package:teaching_assistant/pages/signup.dart';
 
 void main() {

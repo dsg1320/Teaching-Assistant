@@ -42,6 +42,8 @@ dependencies:
   shimmer: ^3.0.0
   flutter_staggered_animations: ^1.1.1
   shared_preferences: ^2.3.2
+  flutter_highlight: ^0.7.0
+  highlight_text: ^1.8.0
 
 dev_dependencies:
   flutter_test:

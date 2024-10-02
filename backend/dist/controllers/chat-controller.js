@@ -18,14 +18,14 @@ export const handleChat = async (req, res) => {
         //console.log(session.chatHistory)
         const formattedChatHistory = session.chatHistory.map((msg) => ({
             role: msg.role === 'user' ? "user" : "model",
-            parts: [{ data: msg.content }]
+            parts: [{ text: msg.content }]
         }));
-        console.log("Chat History Before Sending:", JSON.stringify(formattedChatHistory, null, 2));
+        //console.log("Chat History Before Sending:", JSON.stringify(formattedChatHistory, null, 2));
         if (formattedChatHistory.length === 0) {
             return res.status(400).json({ error: 'Chat history is empty.' });
         }
         for (const msg of formattedChatHistory) {
-            if (!msg.role || !msg.parts || !msg.parts[0].data) {
+            if (!msg.role || !msg.parts || !msg.parts[0].text) {
                 return res.status(400).json({ error: 'Chat history is missing required fields.' });
             }
         }
