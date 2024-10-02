@@ -56,20 +56,25 @@ This project is an AI-powered teaching assistant built to help students learn So
    flutter run
    ```
 ## Results
-**Login**
-![Login page](app%20images/app%20images/login.png)
+<div style="text-align: center;">
 
-**Session Start**
-![Start a new session](app%20images/app%20images/chat%20start.png)
+**Login**  
+<img src="app%20images/app%20images/login.png" alt="Login page" width="300"/>
 
-**Session responses**
-![Socratic teaching assistant responses](app%20images/app%20images/chat%20responses.png)
+**Session Start**  
+<img src="app%20images/app%20images/chat%20start.png" alt="Start a new session" width="300"/>
 
-**Code generation**
-![Teaching assistant code generation](app%20images/app%20images/chat%20code%20gen.png)
+**Session responses**  
+<img src="app%20images/app%20images/chat%20responses.png" alt="Socratic teaching assistant responses" width="300"/>
 
-**Session List**
-![The list of sessions created by the user](app%20images/app%20images/session%20list.png)
+**Code generation**  
+<img src="app%20images/app%20images/chat%20code%20gen.png" alt="Teaching assistant code generation" width="300"/>
+
+**Session List**  
+<img src="app%20images/app%20images/session%20list.png" alt="The list of sessions created by the user" width="300"/>
+
+</div>
+
 
 
 ## License
