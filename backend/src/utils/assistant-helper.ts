@@ -1,4 +1,3 @@
-
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai"; // ES module import
   const apiKey = "AIzaSyCAgwQKNiamSzkgbqCWdZcNcdSLDsC89Yk";
   //console.log("API Key:", apiKey); // Store API key in .env file
