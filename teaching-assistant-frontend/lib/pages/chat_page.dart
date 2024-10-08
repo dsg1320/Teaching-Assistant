@@ -40,7 +40,7 @@ class _ChatPageState extends State<ChatPage> {
       _isLoading = true;
     });
 
-    String apiUrl = "http://localhost:5001/api/v1/chats/chat";
+    String apiUrl = "https://teaching-assistant-production.up.railway.app/api/v1/chats/chat";
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
@@ -56,7 +56,7 @@ class _ChatPageState extends State<ChatPage> {
         final modelResponse =
             responseBody['message'] ?? "Sorry, I didn't understand that.";
 
-        // Update the messages list with the assistant's response
+
         setState(() {
           widget.messages.add({'sender': 'model', 'text': modelResponse});
           _isLoading = false;
@@ -102,6 +102,13 @@ class _ChatPageState extends State<ChatPage> {
   bool _isCodeSnippet(String message) {
     return message
         .contains("```"); // Check if the message contains code delimiters
+  }
+  
+   void _openQuickNotes() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => NotesListPage(),
+    );
   }
 
   @override
