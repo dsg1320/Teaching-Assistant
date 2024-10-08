@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage>
 
   Future<void> startNewChat() async {
     String newTitle = 'Chat ${chatTitles.length + 1}';
-    String apiUrl = "http://localhost:5001/api/v1/sessions/create-session";
+    String apiUrl = "https://teaching-assistant-production.up.railway.app/api/v1/sessions/create-session";
 
     Map<String, String> requestBody = {
       'userId': '66f822c382f1a2aa111beaec',
