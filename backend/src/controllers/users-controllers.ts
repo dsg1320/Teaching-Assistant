@@ -38,7 +38,7 @@ export const userSignup=async(req:Request, res:Response, next: NextFunction)=> {
         expires.setDate(expires.getDate()+7);
         res.cookie(COOKIE_NAME,token,{path:"/", domain:"localhost",expires,httpOnly:true,signed:true,});
 
-        return res.status(200).json({message:"OK",id:user._id.toString});
+        return res.status(200).json({message:"OK",id:user._id.toString()});
     }catch(error){
         return res.status(500).json({message:"Error",cause:error.message});
     }
