@@ -2,7 +2,7 @@ import app from "./app.js";
 import { connecToDatabase } from "./db/connection.js";
 
 // Connections and listeners
-const PORT = process.env.PORT || 8080; // Use the port from the .env file
+const PORT = process.env.PORT || 5000; // Use the port from the .env file
 connecToDatabase()
   .then(() => {
     app.listen(PORT, () => console.log(`Server open and connected to database on port ${PORT}`));

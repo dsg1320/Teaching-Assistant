@@ -19,7 +19,7 @@ class _SignupPageState extends State<SignupPage> {
   Future<void> _signup() async {
     final response = await http.post(
       Uri.parse(
-          'http://localhost:5001/api/v1/user/signup'), // Your signup endpoint
+          'http://localhost:5000/api/v1/user/signup'), // Your signup endpoint
       headers: {
         'Content-Type': 'application/json',
       },

@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "/Users/vigneshkumar/Teaching-Assistant/teaching-assistant-frontend/linux"
+    "cmake.sourceDirectory": "/Users/vigneshkumar/Teaching-Assistant/teaching-assistant-frontend/linux",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

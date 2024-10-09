@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:teaching_assistant/components/colors.dart';
 import 'package:teaching_assistant/components/sidebar.dart';
+import 'package:teaching_assistant/pages/loginpage.dart';
 import 'dart:convert';
 import 'chat_page.dart';
+import 'loginpage.dart'; // Assuming you have a LoginPage
 
 class HomePage extends StatefulWidget {
   @override
@@ -31,7 +33,7 @@ class _HomePageState extends State<HomePage>
 
   Future<void> startNewChat() async {
     String newTitle = 'Chat ${chatTitles.length + 1}';
-    String apiUrl = "http://localhost:5001/api/v1/sessions/create-session";
+    String apiUrl = "http://localhost:5000/api/v1/sessions/create-session";
 
     Map<String, String> requestBody = {
       'userId': '66f822c382f1a2aa111beaec',
@@ -103,6 +105,39 @@ class _HomePageState extends State<HomePage>
     );
   }
 
+  // Function to display Logout confirmation dialog
+  void _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to log out?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(), // Close the dialog
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          LoginPage()), // Navigate to login page
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.secondaryColor),
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -132,6 +167,12 @@ class _HomePageState extends State<HomePage>
               ).createShader(Rect.fromLTWH(0, 0, 200, 70)),
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout), // Logout icon
+            onPressed: _showLogoutDialog, // Show logout confirmation dialog
+          ),
+        ],
       ),
       drawer: Sidebar(
         chatTitles: chatTitles,

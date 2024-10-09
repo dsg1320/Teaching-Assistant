@@ -40,7 +40,7 @@ class _ChatPageState extends State<ChatPage> {
       _isLoading = true;
     });
 
-    String apiUrl = "http://localhost:5001/api/v1/chats/chat";
+    String apiUrl = "http://localhost:5000/api/v1/chats/chat";
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
@@ -101,7 +101,7 @@ class _ChatPageState extends State<ChatPage> {
   // Improved code block detection
   bool _isCodeSnippet(String message) {
     return message
-        .contains("```"); // Check if the message contains code delimiters
+        .contains(""); // Check if the message contains code delimiters
   }
 
   @override
@@ -142,7 +142,7 @@ class _ChatPageState extends State<ChatPage> {
                 if (widget.messages[index]['sender'] == 'model') {
                   if (_isCodeSnippet(widget.messages[index]['text']!)) {
                     final codeText = widget.messages[index]['text']!
-                        .replaceAll("```", ""); // Remove backticks
+                        .replaceAll("", ""); // Remove backticks
 
                     return Align(
                       alignment: Alignment.centerLeft,
