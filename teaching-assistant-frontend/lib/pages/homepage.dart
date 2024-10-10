@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage>
       if (token != null) {
         final response = await http.get(
           Uri.parse(
-              'http://10.0.2.2:5001/api/v1/sessions/get/${prefs.getString('userId')}'),
+              'https://teaching-assistant-production.up.railway.app/api/v1/sessions/get/${prefs.getString('userId')}'),
           headers: {
             'Authorization': 'Bearer $token',
           },
