@@ -64,7 +64,7 @@ class _ChatPageState extends State<ChatPage> {
       _isLoading = true;
     });
 
-    String apiUrl = "http://10.0.2.2:5001/api/v1/chats/chat";
+    String apiUrl = "https://teaching-assistant-production.up.railway.app/api/v1/chats/chat";
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
