@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (email.isNotEmpty && password.isNotEmpty) {
       String apiUrl =
-          "http://10.0.2.2:5001/api/v1/user/login"; // Your API URL for login
+          "https://teaching-assistant-production.up.railway.app/api/v1/user/login"; // Your API URL for login
 
       try {
         final response = await http.post(
