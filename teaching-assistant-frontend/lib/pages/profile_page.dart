@@ -26,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
       if (userId != null && token != null) {
         final response = await http.get(
-          Uri.parse('http://10.0.2.2:5001/api/v1/sessions/average-performance/$userId'),
+          Uri.parse('https://teaching-assistant-production.up.railway.app/api/v1/sessions/average-performance/$userId'),
           headers: {
             'Authorization': 'Bearer $token',
           },
