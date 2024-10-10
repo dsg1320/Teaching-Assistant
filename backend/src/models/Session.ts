@@ -31,9 +31,26 @@ const sessionSchema = new mongoose.Schema({
             timestamp: {
                 type: Date,
                 default: Date.now,
-            }
-        }
-    ]
+            },
+            accuracy: {
+                type: Number
+            },
+            complexity: {
+                type: String,
+                enum: ["easy", "moderate", "difficult"],
+                required: true
+            },
+        },
+    ],
+    performanceScore: {
+        type: Number,
+        default: 0
+    },
+    topicScores: {
+        type: Map,
+        of: Number, // Specify the type of values in the Map
+        default: {}
+    }
 });
 
 const Session = mongoose.model('Session', sessionSchema);

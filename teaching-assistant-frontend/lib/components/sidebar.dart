@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teaching_assistant/components/colors.dart';
+import 'package:teaching_assistant/pages/profile_page.dart';
 
 class Sidebar extends StatelessWidget {
   final List<String> chatTitles;
@@ -28,6 +29,16 @@ class Sidebar extends StatelessWidget {
               color: AppColors.accentColor,
             ),
           ),
+          // Inside Sidebar widget
+            ListTile(
+              title: Text('Profile'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
+            ),
           ...chatTitles.map((title) => ListTile(
                 title: Text(title),
                 onTap: () {

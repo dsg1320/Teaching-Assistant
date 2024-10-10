@@ -1,0 +1,1 @@
+{"version":3,"file":"Topic.js","sourceRoot":"","sources":["../../src/models/Topic.ts"],"names":[],"mappings":"AAAA,OAAO,QAAQ,MAAM,UAAU,CAAC;AAEhC,MAAM,WAAW,GAAG,IAAI,QAAQ,CAAC,MAAM,CAAC;IACtC,IAAI,EAAE,MAAM;IACZ,UAAU,EAAE,MAAM,EAAE,kCAAkC;CACvD,CAAC,CAAC;AAEH,eAAe,QAAQ,CAAC,KAAK,CAAC,OAAO,EAAE,WAAW,CAAC,CAAC"}

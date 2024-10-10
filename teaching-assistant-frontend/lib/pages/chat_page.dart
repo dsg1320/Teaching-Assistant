@@ -35,7 +35,24 @@ class _ChatPageState extends State<ChatPage> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
 
-  
+  void _closeSession() async {
+  try {
+    final response = await http.put(
+      Uri.parse('http://10.0.2.2:5001/api/v1/sessions/update-performance/${widget.sessionId}'),
+      headers: {
+        'Authorization': 'Bearer YOUR_JWT_TOKEN',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print('Performance updated successfully');
+    } else {
+      print('Failed to update performance');
+    }
+  } catch (e) {
+    print('Error updating performance: $e');
+  }
+}
 
   void _sendMessage() async {
     if (_controller.text.isEmpty) return;
@@ -118,6 +135,12 @@ class _ChatPageState extends State<ChatPage> {
       backgroundColor: AppColors.primaryColor,
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.close),
+            onPressed: _closeSession,
+          ),
+        ],
         backgroundColor: AppColors.primaryColor,
         elevation: 0,
       ),

@@ -161,7 +161,7 @@ class _HomePageState extends State<HomePage>
         };
       }).toList();
 
-      print(chatHistory);
+      //print(chatHistory);
 
       if (chatHistory == null) {
         chatHistory = [];
@@ -258,8 +258,8 @@ class _HomePageState extends State<HomePage>
       drawer: Sidebar(
         chatTitles: chatTitles,
         onChatSelected: (title) {
-          print('Selected Chat Title: $title');
-          print(chatTitles);
+          //print('Selected Chat Title: $title');
+          //print(chatTitles);
           int index = chatTitles.indexOf(title);
           if (index != -1) {
             openChat(index);

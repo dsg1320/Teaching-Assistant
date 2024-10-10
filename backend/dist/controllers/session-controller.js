@@ -1,5 +1,8 @@
 import User from '../models/User.js';
 import Session from '../models/Session.js'; // If session is separate
+//import { geminiAPI } from '../utils/geminiAPI.js';
+import { calculateNumberOfQuestions, calculatePerformanceScore } from '../utils/performance-calculator.js';
+//import { calculateComplexity } from '../utils/topic-helper.js';
 import mongoose from 'mongoose';
 export const createSession = async (req, res) => {
     try {
@@ -89,6 +92,62 @@ export const deleteSessionById = async (req, res) => {
     catch (error) {
         console.error('Error deleting session:', error);
         res.status(500).json({ message: 'An error occurred while deleting the session', error });
+    }
+};
+export const updateSessionPerformance = async (sessionId) => {
+    try {
+        const session = await Session.findById(sessionId);
+        const chatHistory = session.chatHistory || [];
+        if (!session) {
+            throw new Error('Session Not Found');
+        }
+        ;
+        //console.log("chatHistory:", chatHistory);
+        const numQuestions = calculateNumberOfQuestions(session.chatHistory);
+        console.log(numQuestions);
+        const complexityScores = { easy: 1, moderate: 2, difficult: 3 };
+        const complexities = session.chatHistory.map(msg => complexityScores[msg.complexity] || 0);
+        const complexity = complexities.length ? complexities.reduce((a, b) => a + b) / complexities.length : 0;
+        console.log(complexity);
+        const performanceScore = calculatePerformanceScore(numQuestions, complexity);
+        console.log(performanceScore);
+        session.performanceScore = performanceScore;
+        // Calculate topic scores if needed
+        // session.topicScores = ...
+        await session.save();
+    }
+    catch (error) {
+        console.error('Error updating performance:', error);
+        throw new Error('Error updating performance');
+    }
+};
+export const getPerformanceScoresByUser = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const sessions = await Session.find({ userId }).select('sessionName performanceScore');
+        if (!sessions || sessions.length === 0) {
+            return res.status(404).json({ message: 'No sessions found for this user.' });
+        }
+        res.status(200).json(sessions);
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+export const getAveragePerformanceScoreByUser = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const sessions = await Session.find({ userId }).select('performanceScore');
+        if (!sessions || sessions.length === 0) {
+            return res.status(404).json({ message: 'No sessions found for this user.' });
+        }
+        const totalScore = sessions.reduce((acc, session) => acc + (session.performanceScore || 0), 0);
+        const averageScore = totalScore / sessions.length;
+        const formattedAverageScore = parseFloat(averageScore.toFixed(2));
+        res.status(200).json({ averagePerformanceScore: formattedAverageScore });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Server error', error });
     }
 };
 //# sourceMappingURL=session-controller.js.map
