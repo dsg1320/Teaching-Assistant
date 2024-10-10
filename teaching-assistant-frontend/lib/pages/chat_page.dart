@@ -38,7 +38,7 @@ class _ChatPageState extends State<ChatPage> {
   void _closeSession() async {
   try {
     final response = await http.put(
-      Uri.parse('http://10.0.2.2:5001/api/v1/sessions/update-performance/${widget.sessionId}'),
+      Uri.parse('https://teaching-assistant-production.up.railway.app/api/v1/sessions/update-performance/${widget.sessionId}'),
       headers: {
         'Authorization': 'Bearer YOUR_JWT_TOKEN',
       },
