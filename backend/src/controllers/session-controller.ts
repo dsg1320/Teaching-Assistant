@@ -1,6 +1,7 @@
 import User from '../models/User.js';
 import Session from '../models/Session.js'; // If session is separate
 import { Request, Response } from 'express';
+import mongoose from 'mongoose';
 
 export const createSession = async (req, res) => {
   try {
@@ -37,10 +38,14 @@ export const createSession = async (req, res) => {
 export const getSessionsByUser = async (req: Request, res: Response) => {
   const { userId } = req.params;
 
+  if (!mongoose.isValidObjectId(userId)) {
+    return res.status(400).json({ message: 'Invalid user ID.' });
+}
+
   try {
       const sessions = await Session.find({ userId }).select('sessionName _id');
       
-      if (!sessions) {
+      if (!sessions || sessions.length == 0) {
           return res.status(404).json({ message: 'No sessions found for this user.' });
       }
 
@@ -52,6 +57,11 @@ export const getSessionsByUser = async (req: Request, res: Response) => {
 // Function to get the chat history by session ID
 export const getChatHistoryBySessionId = async (req: Request, res: Response) => {
   const { sessionId } = req.params; // Extract sessionId from params
+
+
+  if (!mongoose.isValidObjectId(sessionId)) {
+    return res.status(400).json({ message: 'Invalid session ID.' });
+}
 
   try {
       // Find the session by sessionId and return the chatHistory
@@ -99,3 +109,4 @@ export const deleteSessionById = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'An error occurred while deleting the session', error });
   }
 };
+

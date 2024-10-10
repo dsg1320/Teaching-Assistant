@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:teaching_assistant/components/colors.dart';
 import 'dart:convert';
 
@@ -22,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (email.isNotEmpty && password.isNotEmpty) {
       String apiUrl =
-          "http://localhost:5000/api/v1/user/login"; // Your API URL for login
+          "http://10.0.2.2:5001/api/v1/user/login"; // Your API URL for login
 
       try {
         final response = await http.post(
@@ -34,8 +35,18 @@ class _LoginPageState extends State<LoginPage> {
           }),
         );
 
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+
         if (response.statusCode == 200) {
           final responseBody = json.decode(response.body);
+
+          String? token = responseBody['token'] as String?;
+          String? userId = responseBody['id'] as String?;
+
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('jwtToken', responseBody['token']);
+          await prefs.setString('userId', responseBody['id']);
 
           // Set the success message
           setState(() {

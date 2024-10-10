@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_highlight/flutter_highlight.dart';
+import 'package:flutter_highlight/themes/github.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:teaching_assistant/components/colors.dart';
-import 'package:flutter_highlight/flutter_highlight.dart';
-import 'package:flutter_highlight/themes/github.dart';
+import 'package:teaching_assistant/pages/homepage.dart';
+import 'package:teaching_assistant/pages/note_list_page.dart';
+import 'package:teaching_assistant/pages/note_page.dart';
 
 class ChatPage extends StatefulWidget {
   final String title;
   final String sessionId;
   final List<Map<String, String>> messages;
   final Function(List<Map<String, String>>) onUpdateMessages;
+  
 
   ChatPage({
     required this.title,
@@ -25,22 +30,24 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  List<List<Map<String, String>>> allChats = [];
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
+
+  
 
   void _sendMessage() async {
     if (_controller.text.isEmpty) return;
 
     final userMessage = {'sender': 'user', 'text': _controller.text};
 
-    // Update local messages with user's message
     setState(() {
       widget.messages.add(userMessage);
       _isLoading = true;
     });
 
-    String apiUrl = "http://localhost:5000/api/v1/chats/chat";
+    String apiUrl = "http://10.0.2.2:5001/api/v1/chats/chat";
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
@@ -55,7 +62,6 @@ class _ChatPageState extends State<ChatPage> {
         final responseBody = json.decode(response.body);
         final modelResponse =
             responseBody['message'] ?? "Sorry, I didn't understand that.";
-
 
         setState(() {
           widget.messages.add({'sender': 'model', 'text': modelResponse});
@@ -80,13 +86,8 @@ class _ChatPageState extends State<ChatPage> {
       });
     }
 
-    // Update messages in the parent widget
     widget.onUpdateMessages(widget.messages);
-
-    // Clear the input field
     _controller.clear();
-
-    // Scroll to the bottom after sending a message
     _scrollToBottom();
   }
 
@@ -101,7 +102,7 @@ class _ChatPageState extends State<ChatPage> {
   // Improved code block detection
   bool _isCodeSnippet(String message) {
     return message
-        .contains(""); // Check if the message contains code delimiters
+        .contains("```"); // Check if the message contains code delimiters
   }
   
    void _openQuickNotes() {
@@ -149,7 +150,7 @@ class _ChatPageState extends State<ChatPage> {
                 if (widget.messages[index]['sender'] == 'model') {
                   if (_isCodeSnippet(widget.messages[index]['text']!)) {
                     final codeText = widget.messages[index]['text']!
-                        .replaceAll("", ""); // Remove backticks
+                        .replaceAll("```", ""); // Remove backticks
 
                     return Align(
                       alignment: Alignment.centerLeft,
@@ -260,6 +261,24 @@ class _ChatPageState extends State<ChatPage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  GestureDetector(
+                    onTap: _openQuickNotes,
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors
+                            .accentColor, // Same color as the send button
+                      ),
+                      child: Icon(
+                        Icons.note_add,
+                        color: AppColors
+                            .primaryColor, // Same color as the send button icon
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(width: 10), // Spacing between note icon and input
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(
@@ -306,7 +325,7 @@ class _ChatPageState extends State<ChatPage> {
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: AppColors.secondaryColor,
+                        color: AppColors.accentColor,
                       ),
                       child: Icon(
                         Icons.send,

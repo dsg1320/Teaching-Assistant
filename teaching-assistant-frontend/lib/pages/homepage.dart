@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:teaching_assistant/components/colors.dart';
 import 'package:teaching_assistant/components/sidebar.dart';
+import 'package:teaching_assistant/pages/loginpage.dart';
 import 'package:teaching_assistant/pages/loginpage.dart';
 import 'dart:convert';
 import 'chat_page.dart';
@@ -15,10 +17,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   final List<List<Map<String, String>>> allChats = [];
-  final List<String> chatTitles = [];
-  final List<String> sessionIds = [];
+  List<String> chatTitles = [];
+  //List<String> chatTitle = [];
+  List<String> sessionIds = [];
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
+  List<dynamic> sessions = [];
 
   @override
   void initState() {
@@ -29,14 +33,58 @@ class _HomePageState extends State<HomePage>
     );
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
     _controller.forward();
+    fetchSessions();
+  }
+
+  Future<void> fetchSessions() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('jwtToken');
+
+      if (token != null) {
+        final response = await http.get(
+          Uri.parse(
+              'http://10.0.2.2:5001/api/v1/sessions/get/${prefs.getString('userId')}'),
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        );
+
+        if (response.statusCode == 200) {
+          setState(() {
+            sessions = jsonDecode(response.body);
+            print(sessions);
+            chatTitles = sessions
+                .map<String>((session) => session['sessionName'] as String)
+                .toList();
+            sessionIds = sessions
+                .map<String>((session) => session['_id'] as String)
+                .toList();
+          });
+        } else {
+          print('Failed to load sessions');
+        }
+      } else {
+        print('No token found');
+      }
+    } catch (e) {
+      print('Error fetching sessions: $e');
+    }
   }
 
   Future<void> startNewChat() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('userId');
+
+    if (userId == null) {
+      print('User ID not found');
+      return;
+    }
     String newTitle = 'Chat ${chatTitles.length + 1}';
-    String apiUrl = "http://localhost:5000/api/v1/sessions/create-session";
+    String apiUrl = "https://teaching-assistant-production.up.railway.app/api/v1/sessions/create-session";
 
     Map<String, String> requestBody = {
-      'userId': '66f822c382f1a2aa111beaec',
+      'userId': userId,
       'sessionName': newTitle,
     };
 
@@ -87,22 +135,55 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  void openChat(int index) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ChatPage(
-          title: chatTitles[index],
-          sessionId: sessionIds[index],
-          messages: allChats[index],
-          onUpdateMessages: (newMessages) {
-            setState(() {
-              allChats[index] = newMessages;
-            });
-          },
-        ),
-      ),
+  void openChat(int index) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('jwtToken');
+
+    if (token == null) {
+      print('No token found');
+      return;
+    }
+
+    final response = await http.get(
+      Uri.parse(
+          'http://10.0.2.2:5001/api/v1/sessions/chat/${sessionIds[index]}'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
     );
+
+    if (response.statusCode == 200) {
+      List<dynamic> decodedResponse = jsonDecode(response.body);
+      List<Map<String, String>> chatHistory = decodedResponse.map((item) {
+        return {
+          'sender': item['role'].toString(),
+          'text': item['content'].toString(),
+        };
+      }).toList();
+
+      print(chatHistory);
+
+      if (chatHistory == null) {
+        chatHistory = [];
+      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatPage(
+            title: chatTitles[index],
+            sessionId: sessionIds[index],
+            messages: chatHistory,
+            onUpdateMessages: (newMessages) {
+              setState(() {
+                allChats[index] = newMessages;
+              });
+            },
+          ),
+        ),
+      );
+    } else {
+      print('Failed to load chat history');
+    }
   }
 
   // Function to display Logout confirmation dialog
@@ -177,8 +258,14 @@ class _HomePageState extends State<HomePage>
       drawer: Sidebar(
         chatTitles: chatTitles,
         onChatSelected: (title) {
+          print('Selected Chat Title: $title');
+          print(chatTitles);
           int index = chatTitles.indexOf(title);
-          openChat(index);
+          if (index != -1) {
+            openChat(index);
+          } else {
+            print('Error: Chat title not found');
+          }
         },
         onNewChat: (newTitle) {
           startNewChat();
